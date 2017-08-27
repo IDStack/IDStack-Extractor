@@ -5,12 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.idstack</groupId>
-    <artifactId>extractor</artifactId>
+    <artifactId>extractor-webservice</artifactId>
     <packaging>pom</packaging>
     <version>${idstack.version}</version>
 
     <modules>
         <module>api</module>
+        <module>feature</module>
+        <module>extractor</module>
     </modules>
 
     <dependencies>

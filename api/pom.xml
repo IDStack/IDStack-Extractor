@@ -34,7 +34,7 @@
     </dependencies>
 
     <build>
-        <finalName>api</finalName>
+        <finalName>extractor-webservice</finalName>
     </build>
 
     <properties>
