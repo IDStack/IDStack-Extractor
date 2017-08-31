@@ -22,7 +22,7 @@ public class APIHandler {
 
     @RequestMapping("/")
     public void root(HttpServletResponse httpServletResponse) throws IOException {
-        httpServletResponse.sendRedirect("http://idstack.one/validator");
+        httpServletResponse.sendRedirect("http://idstack.one/extractor");
     }
 
     @RequestMapping(value = "/{version}/saveconfig/basic", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -73,9 +73,9 @@ public class APIHandler {
         return router.saveCertificate(Constant.GlobalAttribute.PVT_CERTIFICATE, certificate, password);
     }
 
-    @RequestMapping(value = "/{version}/sign", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{version}/extract", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String signDocument(@PathVariable("version") String version, @RequestBody String json) {
-        return router.signDocument(json);
+        return router.extractDocument(json);
     }
 }

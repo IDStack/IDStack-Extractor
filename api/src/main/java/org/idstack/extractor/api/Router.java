@@ -90,14 +90,11 @@ public class Router {
         return new FileSystemResource(new File(getProperty(Constant.GlobalAttribute.PUB_CERTIFICATE_FILE_PATH) + uuid + getProperty(Constant.GlobalAttribute.PUB_CERTIFICATE_TYPE)));
     }
 
-    public String signDocument(String json) {
-        String output = FeatureImpl.getFactory().signDocument(configFilePath, json);
-        if (output.equals(Constant.Status.OK)) {
-            // TODO
-            // call sign method(document, isContentSignable, urlList, getPrivateCertificate(), getPassword())
-            // sign method should sign only the urlList available in the JSON
-        }
-        return output;
+    public String extractDocument(String json) {
+        // TODO
+        // call extract method(json, getPrivateCertificate(), getPassword())
+        // sign method should sign only the urlList available in the JSON
+        return null;
     }
 
     private String getPrivateCertificate() {
