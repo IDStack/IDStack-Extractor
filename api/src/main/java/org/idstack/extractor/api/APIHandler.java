@@ -1,7 +1,7 @@
 package org.idstack.extractor.api;
 
 import org.idstack.feature.FeatureImpl;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,7 +18,8 @@ import java.io.IOException;
 @RestController
 public class APIHandler {
 
-    Router router = new Router();
+    @Autowired
+    Router router;
 
     @RequestMapping("/")
     public void root(HttpServletResponse httpServletResponse) throws IOException {
@@ -61,10 +62,10 @@ public class APIHandler {
         return FeatureImpl.getFactory().savePublicCertificate(certificate, router.configFilePath, router.pubCertFilePath, router.pubCertType);
     }
 
-    @RequestMapping(value = "/{version}/getpubcert/{uuid}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    @RequestMapping(value = "/{version}/getpubcert", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
-    public FileSystemResource getPublicCertificate(@PathVariable("version") String version, @PathVariable("uuid") String uuid) {
-        return FeatureImpl.getFactory().getPublicCertificate(router.pubCertFilePath, router.pubCertType, uuid);
+    public String getPublicCertificate(@PathVariable("version") String version) {
+        return FeatureImpl.getFactory().getPublicCertificateURL(router.configFilePath, router.pubCertFilePath, router.pubCertType);
     }
 
     @RequestMapping(value = "/{version}/savepvtcert", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -75,7 +76,7 @@ public class APIHandler {
 
     @RequestMapping(value = "/{version}/extract", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String signDocument(@PathVariable("version") String version, @RequestBody String json) {
-        return router.extractDocument(json);
+    public String createMR(@PathVariable("version") String version, @RequestBody String json) {
+        return router.createMR(json);
     }
 }
