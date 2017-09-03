@@ -38,18 +38,6 @@ public class APIHandler {
         return FeatureImpl.getFactory().saveDocumentConfiguration(router.configFilePath, json);
     }
 
-    @RequestMapping(value = "/{version}/saveconfig/whitelist", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String saveWhiteListConfiguration(@PathVariable("version") String version, @RequestBody String json) {
-        return FeatureImpl.getFactory().saveWhiteListConfiguration(router.configFilePath, json);
-    }
-
-    @RequestMapping(value = "/{version}/saveconfig/blacklist", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public String saveBlackListConfiguration(@PathVariable("version") String version, @RequestBody String json) {
-        return FeatureImpl.getFactory().saveBlackListConfiguration(router.configFilePath, json);
-    }
-
     @RequestMapping(value = "/{version}/getconfig/{type}/{property}", method = RequestMethod.GET)
     @ResponseBody
     public Object getConfigurationFile(@PathVariable("version") String version, @PathVariable("type") String type, @PathVariable("property") String property) {
