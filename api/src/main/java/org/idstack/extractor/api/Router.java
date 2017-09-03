@@ -1,5 +1,6 @@
 package org.idstack.extractor.api;
 
+import org.idstack.extractor.JsonCreator;
 import org.idstack.feature.Constant;
 import org.idstack.feature.FeatureImpl;
 import org.springframework.stereotype.Component;
@@ -24,7 +25,7 @@ public class Router {
     public final String pubCertType = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.GlobalAttribute.PUB_CERTIFICATE_TYPE);
 
     public String createMR(String json) {
-        return Constant.Status.OK;
+        return new JsonCreator().constructAsNestedJson(json);
     }
 
     private FileInputStream getPropertiesFile() {
