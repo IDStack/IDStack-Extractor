@@ -35,6 +35,8 @@ public class Router {
     public final String pubCertType = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.GlobalAttribute.PUB_CERTIFICATE_TYPE);
 
     public String createMR(String json) {
+        //TODO : check for document config and check whether this is automatically extractable
+        // Format document.config.idstack file as you wish
         String formattedJson = new JsonCreator().constructAsNestedJson(json);
         JsonExtractor jsonExtractor = new JsonExtractor(FeatureImpl.getFactory().getPrivateCertificateFilePath(configFilePath, pvtCertFilePath, pvtCertType),
                 FeatureImpl.getFactory().getPassword(configFilePath, pvtCertFilePath, pvtCertPasswordType),
