@@ -26,13 +26,13 @@ import java.security.cert.CertificateException;
 @Component
 public class Router {
 
-    public final String apiKey = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.GlobalAttribute.API_KEY);
-    public final String configFilePath = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.GlobalAttribute.CONFIG_FILE_PATH);
-    public final String pvtCertFilePath = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.GlobalAttribute.PVT_CERTIFICATE_FILE_PATH);
-    public final String pvtCertType = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.GlobalAttribute.PVT_CERTIFICATE_TYPE);
-    public final String pvtCertPasswordType = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.GlobalAttribute.PVT_CERTIFICATE_PASSWORD_TYPE);
-    public final String pubCertFilePath = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.GlobalAttribute.PUB_CERTIFICATE_FILE_PATH);
-    public final String pubCertType = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.GlobalAttribute.PUB_CERTIFICATE_TYPE);
+    public final String apiKey = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.Configuration.API_KEY);
+    public final String configFilePath = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.Configuration.CONFIG_FILE_PATH);
+    public final String pvtCertFilePath = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.Configuration.PVT_CERTIFICATE_FILE_PATH);
+    public final String pvtCertType = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.Configuration.PVT_CERTIFICATE_TYPE);
+    public final String pvtCertPasswordType = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.Configuration.PVT_CERTIFICATE_PASSWORD_TYPE);
+    public final String pubCertFilePath = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.Configuration.PUB_CERTIFICATE_FILE_PATH);
+    public final String pubCertType = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.Configuration.PUB_CERTIFICATE_TYPE);
 
     public String createMR(String json) {
         //TODO : check for document config and check whether this is automatically extractable
@@ -50,7 +50,7 @@ public class Router {
 
     private FileInputStream getPropertiesFile() {
         try {
-            return new FileInputStream(getClass().getClassLoader().getResource(Constant.GlobalAttribute.SYSTEM_PROPERTIES_FILE_NAME).getFile());
+            return new FileInputStream(getClass().getClassLoader().getResource(Constant.Configuration.SYSTEM_PROPERTIES_FILE_NAME).getFile());
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -58,14 +58,14 @@ public class Router {
 
     protected String getConfigFileName(String type) {
         switch (type) {
-            case Constant.GlobalAttribute.BASIC_CONFIG:
-                return Constant.GlobalAttribute.BASIC_CONFIG_FILE_NAME;
-            case Constant.GlobalAttribute.DOCUMENT_CONFIG:
-                return Constant.GlobalAttribute.DOCUMENT_CONFIG_FILE_NAME;
-            case Constant.GlobalAttribute.WHITELIST_CONFIG:
-                return Constant.GlobalAttribute.WHITELIST_CONFIG_FILE_NAME;
-            case Constant.GlobalAttribute.BLACKLIST_CONFIG:
-                return Constant.GlobalAttribute.BLACKLIST_CONFIG_FILE_NAME;
+            case Constant.Configuration.BASIC_CONFIG:
+                return Constant.Configuration.BASIC_CONFIG_FILE_NAME;
+            case Constant.Configuration.DOCUMENT_CONFIG:
+                return Constant.Configuration.DOCUMENT_CONFIG_FILE_NAME;
+            case Constant.Configuration.WHITELIST_CONFIG:
+                return Constant.Configuration.WHITELIST_CONFIG_FILE_NAME;
+            case Constant.Configuration.BLACKLIST_CONFIG:
+                return Constant.Configuration.BLACKLIST_CONFIG_FILE_NAME;
             default:
                 return null;
         }
