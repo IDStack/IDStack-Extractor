@@ -46,14 +46,16 @@ public class APIHandler {
     @RequestMapping(value = "/{version}/{apikey}/getconfig/{type}/{property}", method = RequestMethod.GET)
     @ResponseBody
     public Object getConfigurationFile(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @PathVariable("type") String type, @PathVariable("property") String property) {
-        if (!FeatureImpl.getFactory().validateRequest(version, router.apiKey, apikey)) return Constant.Status.ERROR_REQUEST;
+        if (!FeatureImpl.getFactory().validateRequest(version, router.apiKey, apikey))
+            return Constant.Status.ERROR_REQUEST;
         return FeatureImpl.getFactory().getConfiguration(router.configFilePath, router.getConfigFileName(type), property);
     }
 
     @RequestMapping(value = "/{version}/{apikey}/savepubcert", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
     public String savePublicCertificate(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestParam(value = "cert") final MultipartFile certificate) {
-        if (!FeatureImpl.getFactory().validateRequest(version, router.apiKey, apikey)) return Constant.Status.ERROR_REQUEST;
+        if (!FeatureImpl.getFactory().validateRequest(version, router.apiKey, apikey))
+            return Constant.Status.ERROR_REQUEST;
         return FeatureImpl.getFactory().savePublicCertificate(certificate, router.configFilePath, router.pubCertFilePath, router.pubCertType);
     }
 
@@ -67,7 +69,8 @@ public class APIHandler {
     @RequestMapping(value = "/{version}/{apikey}/savepvtcert", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
     public String savePrivateCertificate(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestParam(value = "cert") final MultipartFile certificate, @RequestParam(value = "password") String password) {
-        if (!FeatureImpl.getFactory().validateRequest(version, router.apiKey, apikey)) return Constant.Status.ERROR_REQUEST;
+        if (!FeatureImpl.getFactory().validateRequest(version, router.apiKey, apikey))
+            return Constant.Status.ERROR_REQUEST;
         return FeatureImpl.getFactory().savePrivateCertificate(certificate, password, router.configFilePath, router.pvtCertFilePath, router.pvtCertType, router.pvtCertPasswordType);
     }
 
