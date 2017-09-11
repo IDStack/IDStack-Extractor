@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * @author Chanaka Lakmal
@@ -28,28 +29,27 @@ public class APIHandler {
         httpServletResponse.sendRedirect("http://idstack.one/extractor");
     }
 
-    @RequestMapping(value = "/{version}/{apikey}/saveconfig/basic", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{version}/{apikey}/saveconfig/{type}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String saveBasicConfiguration(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestBody String json) {
+    public String saveBasicConfiguration(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @PathVariable("type") String type, @RequestBody String json) {
         if (!FeatureImpl.getFactory().validateRequest(version, router.apiKey, apikey))
             return Constant.Status.ERROR_REQUEST;
-        return FeatureImpl.getFactory().saveBasicConfiguration(router.configFilePath, json);
+        switch (type) {
+            case Constant.Configuration.BASIC_CONFIG:
+                return FeatureImpl.getFactory().saveBasicConfiguration(router.configFilePath, json);
+            case Constant.Configuration.DOCUMENT_CONFIG:
+                return FeatureImpl.getFactory().saveDocumentConfiguration(router.configFilePath, json);
+            default:
+                return Constant.Status.ERROR_REQUEST;
+        }
     }
 
-    @RequestMapping(value = "/{version}/{apikey}/saveconfig/document", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = {"/{version}/{apikey}/getconfig/{type}/{property}", "/{version}/{apikey}/getconfig/{type}/"}, method = RequestMethod.GET)
     @ResponseBody
-    public String saveDocumentConfiguration(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestBody String json) {
+    public String getConfiguration(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @PathVariable("type") String type, @PathVariable("property") Optional<String> property) {
         if (!FeatureImpl.getFactory().validateRequest(version, router.apiKey, apikey))
             return Constant.Status.ERROR_REQUEST;
-        return FeatureImpl.getFactory().saveDocumentConfiguration(router.configFilePath, json);
-    }
-
-    @RequestMapping(value = "/{version}/{apikey}/getconfig/{type}/{property}", method = RequestMethod.GET)
-    @ResponseBody
-    public String getConfigurationFile(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @PathVariable("type") String type, @PathVariable("property") String property) {
-        if (!FeatureImpl.getFactory().validateRequest(version, router.apiKey, apikey))
-            return Constant.Status.ERROR_REQUEST;
-        return FeatureImpl.getFactory().getConfiguration(router.configFilePath, router.getConfigFileName(type), property);
+        return FeatureImpl.getFactory().getConfigurationAsJson(router.configFilePath, router.getConfigFileName(type), property);
     }
 
     @RequestMapping(value = "/{version}/{apikey}/savepubcert", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
