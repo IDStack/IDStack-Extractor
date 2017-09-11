@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -74,10 +75,12 @@ public class APIHandler {
         return FeatureImpl.getFactory().savePrivateCertificate(certificate, password, router.configFilePath, router.pvtCertFilePath, router.pvtCertType, router.pvtCertPasswordType);
     }
 
-    @RequestMapping(value = "/{version}/extract", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    // TODO: request for a scanned PDF
+    @RequestMapping(value = "/{version}/{apikey}/extract", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
-    public String createMR(@PathVariable("version") String version, @RequestBody String json) {
-        if (!FeatureImpl.getFactory().validateRequest(version)) return Constant.Status.ERROR_REQUEST;
-        return router.createMR(json);
+    public String createMR(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestBody String json, @RequestParam(value = "pdf") final File pdf) {
+        if (!FeatureImpl.getFactory().validateRequest(version, router.apiKey, apikey))
+            return Constant.Status.ERROR_REQUEST;
+        return router.createMR(json, pdf);
     }
 }

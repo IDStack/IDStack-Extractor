@@ -8,6 +8,7 @@ import org.idstack.feature.Constant;
 import org.idstack.feature.FeatureImpl;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -34,13 +35,14 @@ public class Router {
     public final String pubCertFilePath = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.Configuration.PUB_CERTIFICATE_FILE_PATH);
     public final String pubCertType = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.Configuration.PUB_CERTIFICATE_TYPE);
 
-    public String createMR(String json) {
+    public String createMR(String json, File pdf) {
         //TODO : check for document config and check whether this is automatically extractable
         // Format document.config.idstack file as you wish
         String formattedJson = new JsonCreator().constructAsNestedJson(json);
         JsonExtractor jsonExtractor = new JsonExtractor(FeatureImpl.getFactory().getPrivateCertificateFilePath(configFilePath, pvtCertFilePath, pvtCertType),
                 FeatureImpl.getFactory().getPassword(configFilePath, pvtCertFilePath, pvtCertPasswordType),
                 FeatureImpl.getFactory().getPublicCertificateURL(configFilePath, pubCertFilePath, pubCertType));
+        //TODO : call sign pdf method and return pdf as well
         try {
             return jsonExtractor.signExtactedJson(formattedJson);
         } catch (CertificateException | UnrecoverableKeyException | NoSuchAlgorithmException | KeyStoreException | CMSException | OperatorCreationException | NoSuchProviderException | IOException e) {
