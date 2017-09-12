@@ -31,7 +31,7 @@ public class APIHandler {
 
     @RequestMapping(value = "/{version}/{apikey}/saveconfig/{type}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String saveBasicConfiguration(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @PathVariable("type") String type, @RequestBody String json) {
+    public String saveConfiguration(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @PathVariable("type") String type, @RequestBody String json) {
         if (!FeatureImpl.getFactory().validateRequest(version))
             return Constant.Status.STATUS_ERROR_VERSION;
         if (!FeatureImpl.getFactory().validateRequest(router.apiKey, apikey))
@@ -103,5 +103,13 @@ public class APIHandler {
         if (!FeatureImpl.getFactory().validateRequest(router.apiKey, apikey))
             return Constant.Status.STATUS_ERROR_API_KEY;
         return FeatureImpl.getFactory().getDocumentList();
+    }
+
+    @RequestMapping(value = "/{version}/store", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseBody
+    public String storeDocuments(@PathVariable("version") String version, @RequestParam(value = "pdf") final MultipartFile pdf, @RequestParam(value = "email") String email, @RequestParam(value = "doc-type") String documentType) {
+        if (!FeatureImpl.getFactory().validateRequest(version))
+            return Constant.Status.STATUS_ERROR_VERSION;
+        return FeatureImpl.getFactory().storeDocuments(pdf, router.storeFilePath, email, documentType, Constant.FileExtenstion.PDF);
     }
 }
