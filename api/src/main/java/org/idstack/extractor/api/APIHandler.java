@@ -102,7 +102,7 @@ public class APIHandler {
             return Constant.Status.STATUS_ERROR_VERSION;
         if (!FeatureImpl.getFactory().validateRequest(router.apiKey, apikey))
             return Constant.Status.STATUS_ERROR_API_KEY;
-        return FeatureImpl.getFactory().getDocumentList();
+        return FeatureImpl.getFactory().getDocumentTypes();
     }
 
     @RequestMapping(value = "/{version}/store", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -111,5 +111,13 @@ public class APIHandler {
         if (!FeatureImpl.getFactory().validateRequest(version))
             return Constant.Status.STATUS_ERROR_VERSION;
         return FeatureImpl.getFactory().storeDocuments(pdf, router.storeFilePath, email, documentType, Constant.FileExtenstion.PDF);
+    }
+
+    @RequestMapping(value = "/{version}/{apikey}/getdocstore", method = RequestMethod.GET)
+    @ResponseBody
+    public String getStoredDocuments(@PathVariable("version") String version) {
+        if (!FeatureImpl.getFactory().validateRequest(version))
+            return Constant.Status.STATUS_ERROR_VERSION;
+        return FeatureImpl.getFactory().getDocumentStore(router.storeFilePath);
     }
 }
