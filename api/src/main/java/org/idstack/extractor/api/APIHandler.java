@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @author Chanaka Lakmal
@@ -107,10 +108,10 @@ public class APIHandler {
 
     @RequestMapping(value = "/{version}/store", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
-    public String storeDocuments(@PathVariable("version") String version, @RequestParam(value = "pdf") final MultipartFile pdf, @RequestParam(value = "email") String email, @RequestParam(value = "doc-type") String documentType) {
+    public String storeDocuments(@PathVariable("version") String version, @RequestParam(value = "pdf") final MultipartFile pdf, @RequestParam(value = "email") String email, @RequestParam(value = "doc-type") String documentType) throws IOException {
         if (!FeatureImpl.getFactory().validateRequest(version))
             return Constant.Status.STATUS_ERROR_VERSION;
-        return FeatureImpl.getFactory().storeDocuments(pdf, router.storeFilePath, email, documentType, Constant.FileExtenstion.PDF);
+        return FeatureImpl.getFactory().storeDocuments(pdf.getBytes(), router.storeFilePath, email, documentType, Constant.FileExtenstion.PDF, UUID.randomUUID().toString());
     }
 
     @RequestMapping(value = "/{version}/{apikey}/getdocstore", method = RequestMethod.GET)
