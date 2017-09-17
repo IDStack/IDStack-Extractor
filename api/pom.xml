@@ -44,7 +44,7 @@
     </dependencies>
 
     <build>
-        <finalName>extractor-api</finalName>
+        <finalName>api-extractor</finalName>
     </build>
 
     <properties>
