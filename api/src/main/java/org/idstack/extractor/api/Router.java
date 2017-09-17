@@ -7,8 +7,8 @@ import org.idstack.extractor.JsonExtractor;
 import org.idstack.feature.Constant;
 import org.idstack.feature.FeatureImpl;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -36,7 +36,7 @@ public class Router {
     public final String pubCertType = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.Configuration.PUB_CERTIFICATE_TYPE);
     public final String storeFilePath = FeatureImpl.getFactory().getProperty(getPropertiesFile(), Constant.Configuration.STORE_FILE_PATH);
 
-    public String createMR(String json, File pdf) {
+    public String createMR(String json, MultipartFile pdf) {
         //TODO : check for document config and check whether this is automatically extractable
         // Format document.config.idstack file as you wish
         String formattedJson = new JsonCreator().constructAsNestedJson(json);

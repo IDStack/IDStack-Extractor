@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
@@ -85,10 +84,9 @@ public class APIHandler {
         return FeatureImpl.getFactory().savePrivateCertificate(certificate, password, router.configFilePath, router.pvtCertFilePath, router.pvtCertType, router.pvtCertPasswordType);
     }
 
-    // TODO: request for a scanned PDF
     @RequestMapping(value = "/{version}/{apikey}/extract", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
-    public String createMR(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestBody String json, @RequestParam(value = "pdf") final File pdf) {
+    public String createMR(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestParam(value = "json") String json, @RequestParam(value = "pdf") final MultipartFile pdf) {
         if (!FeatureImpl.getFactory().validateRequest(version))
             return Constant.Status.STATUS_ERROR_VERSION;
         if (!FeatureImpl.getFactory().validateRequest(router.apiKey, apikey))
