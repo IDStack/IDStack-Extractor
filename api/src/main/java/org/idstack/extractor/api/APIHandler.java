@@ -94,6 +94,7 @@ public class APIHandler {
         return router.createMR(json, pdf);
     }
 
+    //TODO : pass this to lambda function
     @RequestMapping(value = "/{version}/{apikey}/getdoctypes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getDocumentTypeList(@PathVariable("version") String version, @PathVariable("apikey") String apikey) {
@@ -104,6 +105,7 @@ public class APIHandler {
         return FeatureImpl.getFactory().getDocumentTypes();
     }
 
+    //Access by the owner
     @RequestMapping(value = "/{version}/store", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
     public String storeDocuments(@PathVariable("version") String version, @RequestParam(value = "pdf") final MultipartFile pdf, @RequestParam(value = "email") String email, @RequestParam(value = "doc-type") String documentType) throws IOException {
