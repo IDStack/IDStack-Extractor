@@ -29,21 +29,14 @@ public class APIHandler {
         httpServletResponse.sendRedirect("http://idstack.one/extractor");
     }
 
-    @RequestMapping(value = "/{version}/{apikey}/saveconfig/{type}", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{version}/{apikey}/saveconfig/basic", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String saveConfiguration(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @PathVariable("type") String type, @RequestBody String json) {
+    public String saveConfiguration(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestBody String json) {
         if (!FeatureImpl.getFactory().validateRequest(version))
             return Constant.Status.STATUS_ERROR_VERSION;
         if (!FeatureImpl.getFactory().validateRequest(router.apiKey, apikey))
             return Constant.Status.STATUS_ERROR_API_KEY;
-        switch (type) {
-            case Constant.Configuration.BASIC_CONFIG:
-                return FeatureImpl.getFactory().saveBasicConfiguration(router.configFilePath, json);
-            case Constant.Configuration.DOCUMENT_CONFIG:
-                return FeatureImpl.getFactory().saveDocumentConfiguration(router.configFilePath, json);
-            default:
-                return Constant.Status.STATUS_ERROR_PARAMETER;
-        }
+        return FeatureImpl.getFactory().saveBasicConfiguration(router.configFilePath, json);
     }
 
     @RequestMapping(value = {"/{version}/{apikey}/getconfig/{type}/{property}", "/{version}/{apikey}/getconfig/{type}"}, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
