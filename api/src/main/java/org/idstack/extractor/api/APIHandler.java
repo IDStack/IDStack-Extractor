@@ -24,9 +24,9 @@ public class APIHandler {
     @Autowired
     Router router;
 
-    @RequestMapping("/")
+    @RequestMapping(value = {"/", "/{version}", "/{version}/{apikey}"})
     public void root(HttpServletResponse httpServletResponse) throws IOException {
-        httpServletResponse.sendRedirect("http://idstack.one/extractor");
+        httpServletResponse.sendRedirect("http://docs.idstack.apiary.io/");
     }
 
     @RequestMapping(value = "/{version}/{apikey}/saveconfig/basic", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
