@@ -25,7 +25,7 @@ import java.security.cert.CertificateException;
 @Component
 public class Router {
 
-    public String createMR(FeatureImpl feature, String json, MultipartFile pdf, String configFilePath, String pvtCertFilePath, String pvtCertType, String pvtCertPasswordType, String pubCertFilePath, String pubCertType) {
+    protected String createMR(FeatureImpl feature, String json, MultipartFile pdf, String configFilePath, String pvtCertFilePath, String pvtCertType, String pvtCertPasswordType, String pubCertFilePath, String pubCertType) {
         //TODO : check for document config and check whether this is automatically extractable
         // Format document.config.idstack file as you wish
         String formattedJson = new JsonCreator().constructAsNestedJson(json);
