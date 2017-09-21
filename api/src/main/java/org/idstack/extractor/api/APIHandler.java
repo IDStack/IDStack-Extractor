@@ -69,7 +69,7 @@ public class APIHandler {
      * @param json    json of configuration
      * @return status of saving
      */
-    @RequestMapping(value = "/{version}/{apikey}/saveconfig/basic", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{version}/{apikey}/saveconfig/basic", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String saveConfiguration(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestBody String json) {
         if (!feature.validateRequest(version))
@@ -106,7 +106,7 @@ public class APIHandler {
      * @param certificate public certificate file
      * @return status of saving
      */
-    @RequestMapping(value = "/{version}/{apikey}/savepubcert", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @RequestMapping(value = "/{version}/{apikey}/savepubcert", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String savePublicCertificate(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestParam(value = "cert") final MultipartFile certificate) {
         if (!feature.validateRequest(version))
@@ -139,7 +139,7 @@ public class APIHandler {
      * @param password    password of private certificate
      * @return status of saving
      */
-    @RequestMapping(value = "/{version}/{apikey}/savepvtcert", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @RequestMapping(value = "/{version}/{apikey}/savepvtcert", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String savePrivateCertificate(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestParam(value = "cert") final MultipartFile certificate, @RequestParam(value = "password") String password) {
         if (!feature.validateRequest(version))
@@ -159,7 +159,7 @@ public class APIHandler {
      * @return signed json + pdf documents
      */
     //TODO : return both signed MR + signed PDF
-    @RequestMapping(value = "/{version}/{apikey}/extract", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @RequestMapping(value = "/{version}/{apikey}/extract", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String createMR(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestParam(value = "json") String json, @RequestParam(value = "pdf") final MultipartFile pdf) {
         if (!feature.validateRequest(version))
@@ -199,7 +199,7 @@ public class APIHandler {
      * @return status of saving
      * @throws IOException if file cannot be converted into bytes
      */
-    @RequestMapping(value = "/{version}/extract", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @RequestMapping(value = "/{version}/extract", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String extractDocument(@PathVariable("version") String version, @RequestParam(value = "pdf") final MultipartFile pdf, @RequestParam(value = "email") String email, @RequestParam(value = "doc-type") String documentType) throws IOException {
         if (!feature.validateRequest(version))
@@ -214,7 +214,7 @@ public class APIHandler {
      * @param apikey  api key
      * @return document list
      */
-    @RequestMapping(value = "/{version}/{apikey}/getdocstore", method = RequestMethod.GET)
+    @RequestMapping(value = "/{version}/{apikey}/getdocstore", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getStoredDocuments(@PathVariable("version") String version, @PathVariable("apikey") String apikey) {
         if (!feature.validateRequest(version))
