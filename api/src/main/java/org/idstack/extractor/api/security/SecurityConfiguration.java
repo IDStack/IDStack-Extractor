@@ -1,6 +1,6 @@
 package org.idstack.extractor.api.security;
 
-import org.idstack.extractor.api.Router;
+import org.idstack.extractor.api.controller.Router;
 import org.idstack.feature.Constant;
 import org.idstack.feature.FeatureImpl;
 import org.springframework.beans.factory.annotation.Autowired;

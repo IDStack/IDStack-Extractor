@@ -1,4 +1,4 @@
-package org.idstack.extractor.api;
+package org.idstack.extractor.api.controller;
 
 import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.operator.OperatorCreationException;
@@ -25,7 +25,6 @@ import java.security.cert.CertificateException;
 public class Router {
 
     protected String extractDocument(FeatureImpl feature, String json, MultipartFile pdf, String configFilePath, String pvtCertFilePath, String pvtCertType, String pvtCertPasswordType, String pubCertFilePath, String pubCertType) {
-        // Format document.config.idstack file as you wish
         String formattedJson = new JsonCreator().constructAsNestedJson(json);
         JsonExtractor jsonExtractor = new JsonExtractor(feature.getPrivateCertificateFilePath(configFilePath, pvtCertFilePath, pvtCertType),
                 feature.getPassword(configFilePath, pvtCertFilePath, pvtCertPasswordType),

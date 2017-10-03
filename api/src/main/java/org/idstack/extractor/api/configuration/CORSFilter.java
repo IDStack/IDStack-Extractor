@@ -1,4 +1,4 @@
-package org.idstack.extractor.api;
+package org.idstack.extractor.api.configuration;
 
 import org.springframework.stereotype.Component;
 

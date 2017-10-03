@@ -1,4 +1,4 @@
-package org.idstack.extractor.api;
+package org.idstack.extractor.api.controller;
 
 import com.google.gson.Gson;
 import org.idstack.feature.Constant;
