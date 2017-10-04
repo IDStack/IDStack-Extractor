@@ -116,20 +116,6 @@ public class APIHandler {
     }
 
     /**
-     * Get public certificate of the extractor
-     *
-     * @param version api version
-     * @return URL of the public certificate
-     */
-    @RequestMapping(value = "/{version}/getpubcert", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
-    @ResponseBody
-    public String getPublicCertificate(@PathVariable("version") String version) {
-        if (!feature.validateRequest(version))
-            return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_VERSION));
-        return feature.getPublicCertificateURL(configFilePath, pubCertFilePath, pubCertType);
-    }
-
-    /**
      * Save private certificate of the extractor
      *
      * @param version     api version
@@ -186,7 +172,24 @@ public class APIHandler {
         return feature.getDocumentTypes();
     }
 
-    //Access by the owner
+    /**
+     * Get the stored documents in the configured store path
+     *
+     * @param version api version
+     * @param apikey  api key
+     * @return document list
+     */
+    @RequestMapping(value = "/{version}/{apikey}/getdocstore", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String getStoredDocuments(@PathVariable("version") String version, @PathVariable("apikey") String apikey) {
+        if (!feature.validateRequest(version))
+            return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_VERSION));
+        if (!feature.validateRequest(apiKey, apikey))
+            return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_API_KEY));
+        return feature.getDocumentStore(storeFilePath);
+    }
+
+    //*************************************************** PUBLIC API ***************************************************
 
     /**
      * Store the pdf documents received for extraction
@@ -207,19 +210,16 @@ public class APIHandler {
     }
 
     /**
-     * Get the stored documents in the configured store path
+     * Get public certificate of the extractor
      *
      * @param version api version
-     * @param apikey  api key
-     * @return document list
+     * @return URL of the public certificate
      */
-    @RequestMapping(value = "/{version}/{apikey}/getdocstore", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{version}/getpubcert", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
-    public String getStoredDocuments(@PathVariable("version") String version, @PathVariable("apikey") String apikey) {
+    public String getPublicCertificate(@PathVariable("version") String version) {
         if (!feature.validateRequest(version))
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_VERSION));
-        if (!feature.validateRequest(apiKey, apikey))
-            return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_API_KEY));
-        return feature.getDocumentStore(storeFilePath);
+        return feature.getPublicCertificateURL(configFilePath, pubCertFilePath, pubCertType);
     }
 }
