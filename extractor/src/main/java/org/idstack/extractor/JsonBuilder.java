@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.idstack.feature.Constant;
+import org.idstack.feature.Parser;
 import org.idstack.feature.document.*;
 
 import java.util.*;
@@ -15,7 +16,7 @@ import java.util.*;
  * @since 1.0
  */
 
-public class JsonCreator {
+public class JsonBuilder {
 
     public String constructAsNestedJson(String receivedJson) {
         JsonObject obj = new JsonParser().parse(receivedJson).getAsJsonObject();
@@ -23,7 +24,7 @@ public class JsonCreator {
         JsonObject contentObject = obj.getAsJsonObject(Constant.JsonAttribute.CONTENT);
 
         //create metadata object
-        MetaData metaData = new MetaData(metadataObject.get(Constant.JsonAttribute.MetaData.NAME).getAsString(), metadataObject.get(Constant.JsonAttribute.MetaData.VERSION).getAsString(), metadataObject.get(Constant.JsonAttribute.MetaData.DOCUMENT_ID).getAsString(), metadataObject.get(Constant.JsonAttribute.MetaData.DOCUMENT_TYPE).getAsString(), new Gson().fromJson(metadataObject.get(Constant.JsonAttribute.MetaData.ISSUER).toString(), Issuer.class));
+        MetaData metaData = new MetaData(metadataObject.get(Constant.JsonAttribute.MetaData.NAME).getAsString(), metadataObject.get(Constant.JsonAttribute.MetaData.VERSION).getAsString(), metadataObject.get(Constant.JsonAttribute.MetaData.DOCUMENT_ID).getAsString(), metadataObject.get(Constant.JsonAttribute.MetaData.DOCUMENT_TYPE).getAsString(), new Gson().fromJson(metadataObject.get(Constant.JsonAttribute.MetaData.ISSUER).toString(), Issuer.class), null);
 
         //create linked hash map
         LinkedHashMap<String, Object> contentMap = constructJsonContent(contentObject);
@@ -75,5 +76,11 @@ public class JsonCreator {
             }
         }
         return originalMap;
+    }
+
+    public String includeHashInJson(String jsonString, String hash) {
+        Document digitalDocument = new Parser().parseDocumentJson(jsonString);
+        digitalDocument.getMetaData().setPdfHash(hash);
+        return new Gson().toJson(digitalDocument);
     }
 }
