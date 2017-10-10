@@ -6,7 +6,6 @@ import org.idstack.extractor.JsonBuilder;
 import org.idstack.extractor.JsonExtractor;
 import org.idstack.feature.FeatureImpl;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.KeyStoreException;
@@ -24,7 +23,7 @@ import java.security.cert.CertificateException;
 @Component
 public class Router {
 
-    protected String extractDocument(FeatureImpl feature, String json, MultipartFile pdf, String configFilePath, String pvtCertFilePath, String pvtCertType, String pvtCertPasswordType, String pubCertFilePath, String pubCertType) {
+    protected String extractDocument(FeatureImpl feature, String json, String pdfUrl, String configFilePath, String pvtCertFilePath, String pvtCertType, String pvtCertPasswordType, String pubCertFilePath, String pubCertType) {
         //TODO : get the pdf and get the pdf_hash
         String pdfHash = "/FJPadt2/9o1hDV5zcKAmcfVaGWn8+jcpcYknhhCU7I=";
 

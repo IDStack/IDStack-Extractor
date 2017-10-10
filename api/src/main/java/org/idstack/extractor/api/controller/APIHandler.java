@@ -140,18 +140,18 @@ public class APIHandler {
      * @param version api version
      * @param apikey  api key
      * @param json    json of extracted data
-     * @param pdf     pdf of document
+     * @param pdfUrl  pdf URL of document
      * @return signed json + pdf documents
      */
     //TODO : return both signed MR + signed PDF
     @RequestMapping(value = "/{version}/{apikey}/extract", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String extractDocument(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestParam(value = "json") String json, @RequestParam(value = "pdf") final MultipartFile pdf) {
+    public String extractDocument(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestParam(value = "json") String json, @RequestParam(value = "pdf") String pdfUrl) {
         if (!feature.validateRequest(version))
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_VERSION));
         if (!feature.validateRequest(apiKey, apikey))
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_API_KEY));
-        return router.extractDocument(feature, json, pdf, configFilePath, pvtCertFilePath, pvtCertType, pvtCertPasswordType, pubCertFilePath, pubCertType);
+        return router.extractDocument(feature, json, pdfUrl, configFilePath, pvtCertFilePath, pvtCertType, pvtCertPasswordType, pubCertFilePath, pubCertType);
     }
 
     /**
@@ -186,7 +186,7 @@ public class APIHandler {
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_VERSION));
         if (!feature.validateRequest(apiKey, apikey))
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_API_KEY));
-        return feature.getDocumentStore(storeFilePath, false);
+        return feature.getDocumentStore(storeFilePath, configFilePath, false);
     }
 
     //*************************************************** PUBLIC API ***************************************************
