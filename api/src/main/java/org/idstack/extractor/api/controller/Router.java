@@ -25,7 +25,10 @@ import java.security.cert.CertificateException;
 public class Router {
 
     protected String extractDocument(FeatureImpl feature, String json, MultipartFile pdf, String configFilePath, String pvtCertFilePath, String pvtCertType, String pvtCertPasswordType, String pubCertFilePath, String pubCertType) {
-        String formattedJson = new JsonBuilder().constructAsNestedJson(json);
+        //TODO : get the pdf and get the pdf_hash
+        String pdfHash = "/FJPadt2/9o1hDV5zcKAmcfVaGWn8+jcpcYknhhCU7I=";
+
+        String formattedJson = new JsonBuilder().constructAsNestedJson(json, pdfHash, feature);
         JsonExtractor jsonExtractor = new JsonExtractor(feature.getPrivateCertificateFilePath(configFilePath, pvtCertFilePath, pvtCertType),
                 feature.getPassword(configFilePath, pvtCertFilePath, pvtCertPasswordType),
                 feature.getPublicCertificateURL(configFilePath, pubCertFilePath, pubCertType));

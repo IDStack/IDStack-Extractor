@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.idstack.feature.Constant;
+import org.idstack.feature.FeatureImpl;
 import org.idstack.feature.Parser;
 import org.idstack.feature.document.*;
 
@@ -18,13 +19,13 @@ import java.util.*;
 
 public class JsonBuilder {
 
-    public String constructAsNestedJson(String receivedJson) {
+    public String constructAsNestedJson(String receivedJson, String pdfHash,  FeatureImpl feature) {
         JsonObject obj = new JsonParser().parse(receivedJson).getAsJsonObject();
         JsonObject metadataObject = obj.getAsJsonObject(Constant.JsonAttribute.META_DATA);
         JsonObject contentObject = obj.getAsJsonObject(Constant.JsonAttribute.CONTENT);
 
         //create metadata object
-        MetaData metaData = new MetaData(metadataObject.get(Constant.JsonAttribute.MetaData.NAME).getAsString(), metadataObject.get(Constant.JsonAttribute.MetaData.VERSION).getAsString(), metadataObject.get(Constant.JsonAttribute.MetaData.DOCUMENT_ID).getAsString(), metadataObject.get(Constant.JsonAttribute.MetaData.DOCUMENT_TYPE).getAsString(), new Gson().fromJson(metadataObject.get(Constant.JsonAttribute.MetaData.ISSUER).toString(), Issuer.class), null);
+        MetaData metaData = feature.getMetaData(metadataObject.get(Constant.JsonAttribute.MetaData.DOCUMENT_TYPE).getAsString(), pdfHash);
 
         //create linked hash map
         LinkedHashMap<String, Object> contentMap = constructJsonContent(contentObject);
