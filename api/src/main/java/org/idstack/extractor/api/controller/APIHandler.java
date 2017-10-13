@@ -203,7 +203,7 @@ public class APIHandler {
      */
     @RequestMapping(value = "/{version}/extract", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String storeDocument(@PathVariable("version") String version, @RequestParam(value = "pdf") final MultipartFile pdf, @RequestParam(value = "email") String email, @RequestParam(value = "doc-type") String documentType) throws IOException {
+    public String storeDocument(@PathVariable("version") String version, @RequestParam(value = "pdf") final MultipartFile pdf, @RequestParam(value = "email") String email, @RequestParam(value = "doc_type") String documentType) throws IOException {
         if (!feature.validateRequest(version))
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_VERSION));
         return feature.storeDocuments(pdf.getBytes(), storeFilePath, email, documentType, Constant.FileExtenstion.PDF, UUID.randomUUID().toString(), 1);
