@@ -3,6 +3,7 @@ package org.idstack.extractor.api.controller;
 import com.itextpdf.text.DocumentException;
 import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.operator.OperatorCreationException;
+import org.idstack.extractor.DocParserHandler;
 import org.idstack.extractor.JsonBuilder;
 import org.idstack.extractor.JsonExtractor;
 import org.idstack.feature.FeatureImpl;
@@ -25,15 +26,15 @@ import java.util.UUID;
 @Component
 public class Router {
 
-    protected String extractDocument(FeatureImpl feature, String json, String pdfUrl, String configFilePath, String pvtCertFilePath, String pvtCertType, String pvtCertPasswordType, String pubCertFilePath, String pubCertType, String tempFilePath){
+    protected String extractDocument(FeatureImpl feature, String json, String pdfUrl, String configFilePath, String pvtCertFilePath, String pvtCertType, String pvtCertPasswordType, String pubCertFilePath, String pubCertType, String tempFilePath) {
         //TODO replace this later
         pdfUrl = "https://dl.dropboxusercontent.com/s/79vrf1bz7amd08v/TestDocument.pdf?dl=0";
 
-        PdfCertifier pdfCertifier = new PdfCertifier(feature.getPrivateCertificateFilePath(configFilePath, pvtCertFilePath, pvtCertType), feature.getPassword(configFilePath, pvtCertFilePath, pvtCertPasswordType) ,feature.getPublicCertificateURL(configFilePath, pubCertFilePath, pubCertType));
+        PdfCertifier pdfCertifier = new PdfCertifier(feature.getPrivateCertificateFilePath(configFilePath, pvtCertFilePath, pvtCertType), feature.getPassword(configFilePath, pvtCertFilePath, pvtCertPasswordType), feature.getPublicCertificateURL(configFilePath, pubCertFilePath, pubCertType));
         JsonPdfMapper mapper = new JsonPdfMapper();
         try {
             String sigID = UUID.randomUUID().toString();
-            String pdfPath = feature.createTempFile(pdfUrl,tempFilePath, "temp.pdf").getPath();
+            String pdfPath = feature.createTempFile(pdfUrl, tempFilePath, "temp.pdf").getPath();
             pdfCertifier.signPdf(pdfPath, sigID);
             String signedPdfPath = Paths.get(pdfPath).getParent() + File.separator + "signed_" + Paths.get(pdfPath).getFileName().toString();
 
@@ -50,8 +51,9 @@ public class Router {
         }
     }
 
-    protected String parserDocument(String pdfUrl) {
+    protected String parserDocument(FeatureImpl feature, String pdfUrl, String documentType) throws IOException, InterruptedException {
         //TODO : implement docparser request calling
-        return null;
+        String response = new DocParserHandler().getExtractedDocument(feature, pdfUrl, documentType);
+        return response;
     }
 }
