@@ -38,4 +38,9 @@ public class Router {
             throw new RuntimeException(e);
         }
     }
+
+    protected String parserDocument(String pdfUrl) {
+        //TODO : implement docparser request calling
+        return null;
+    }
 }
