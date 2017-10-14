@@ -43,6 +43,7 @@ public class APIHandler {
     private String pubCertFilePath;
     private String pubCertType;
     private String storeFilePath;
+    private String tmpFilePath;
 
     @PostConstruct
     void init() throws IOException {
@@ -54,6 +55,7 @@ public class APIHandler {
         pubCertFilePath = feature.getProperty(resource.getInputStream(), Constant.Configuration.PUB_CERTIFICATE_FILE_PATH);
         pubCertType = feature.getProperty(resource.getInputStream(), Constant.Configuration.PUB_CERTIFICATE_TYPE);
         storeFilePath = feature.getProperty(resource.getInputStream(), Constant.Configuration.STORE_FILE_PATH);
+        tmpFilePath = feature.getProperty(resource.getInputStream(), Constant.Configuration.TEMP_FILE_PATH);
     }
 
     @RequestMapping(value = {"/", "/{version}", "/{version}/{apikey}"})
@@ -151,7 +153,7 @@ public class APIHandler {
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_VERSION));
         if (!feature.validateRequest(apiKey, apikey))
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_API_KEY));
-        return router.extractDocument(feature, json, pdfUrl, configFilePath, pvtCertFilePath, pvtCertType, pvtCertPasswordType, pubCertFilePath, pubCertType);
+        return router.extractDocument(feature, json, pdfUrl, configFilePath, pvtCertFilePath, pvtCertType, pvtCertPasswordType, pubCertFilePath, pubCertType,tmpFilePath);
     }
 
     /**
