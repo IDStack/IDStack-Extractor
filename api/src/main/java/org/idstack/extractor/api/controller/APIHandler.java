@@ -228,7 +228,8 @@ public class APIHandler {
     public String storeDocument(@PathVariable("version") String version, @RequestParam(value = "pdf") final MultipartFile pdf, @RequestParam(value = "email") String email, @RequestParam(value = "doc_type") String documentType) throws IOException {
         if (!feature.validateRequest(version))
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_VERSION));
-        return feature.storeDocuments(pdf.getBytes(), storeFilePath, email, documentType, Constant.FileExtenstion.PDF, UUID.randomUUID().toString(), 1);
+        feature.storeDocuments(pdf.getBytes(), storeFilePath, email, documentType, Constant.FileExtenstion.PDF, UUID.randomUUID().toString(), 1);
+        return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.SUCCESS));
     }
 
     /**
