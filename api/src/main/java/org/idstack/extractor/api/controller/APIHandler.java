@@ -203,12 +203,12 @@ public class APIHandler {
      */
     @RequestMapping(value = "/{version}/{apikey}/parse", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String parseDocument(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestParam(value = "pdf") String pdfUrl) {
+    public String parseDocument(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestParam(value = "pdf") String pdfUrl, @RequestParam(value = "doc_type") String documentType) {
         if (!feature.validateRequest(version))
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_VERSION));
         if (!feature.validateRequest(apiKey, apikey))
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_API_KEY));
-        return router.parserDocument(pdfUrl);
+        return router.parseDocument(feature, pdfUrl, documentType);
     }
 
     //*************************************************** PUBLIC API ***************************************************

@@ -51,9 +51,11 @@ public class Router {
         }
     }
 
-    protected String parserDocument(FeatureImpl feature, String pdfUrl, String documentType) throws IOException, InterruptedException {
-        //TODO : implement docparser request calling
-        String response = new DocParserHandler().getExtractedDocument(feature, pdfUrl, documentType);
-        return response;
+    protected String parseDocument(FeatureImpl feature, String pdfUrl, String documentType) {
+        try {
+            return new DocParserHandler().getExtractedDocument(feature, pdfUrl, documentType);
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
