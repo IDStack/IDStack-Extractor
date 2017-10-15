@@ -65,12 +65,11 @@ public class DocParserHandler {
 
         HashMap<String, String> requestProperties = new HashMap<>();
         requestProperties.put("Authorization", getAuthorizationKey());
-        requestProperties.put("Authorization", getAuthorizationKey());
         String body = "{}";
 
 
         //wait for 10 seconds
-        TimeUnit.SECONDS.sleep(10);
+        TimeUnit.SECONDS.sleep(15);
 
         //call get data API
         String response = feature.callAPI(GET_DATA_URL + parserID + "/" + documentID + "?format=flat", "GET", requestProperties, body);
