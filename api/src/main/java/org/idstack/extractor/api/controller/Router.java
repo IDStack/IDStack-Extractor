@@ -1,14 +1,18 @@
 package org.idstack.extractor.api.controller;
 
+import com.google.gson.Gson;
 import com.itextpdf.text.DocumentException;
 import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.idstack.extractor.DocParserHandler;
 import org.idstack.extractor.JsonBuilder;
 import org.idstack.extractor.JsonExtractor;
+import org.idstack.feature.Constant;
 import org.idstack.feature.FeatureImpl;
+import org.idstack.feature.response.SignedResponse;
 import org.idstack.feature.sign.pdf.JsonPdfMapper;
 import org.idstack.feature.sign.pdf.PdfCertifier;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -26,26 +30,28 @@ import java.util.UUID;
 @Component
 public class Router {
 
-    protected String extractDocument(FeatureImpl feature, String json, String pdfUrl, String configFilePath, String pvtCertFilePath, String pvtCertType, String pvtCertPasswordType, String pubCertFilePath, String pubCertType, String tempFilePath) {
-        //TODO replace this later
-        pdfUrl = "https://dl.dropboxusercontent.com/s/79vrf1bz7amd08v/TestDocument.pdf?dl=0";
+    @Autowired
+    private SignedResponse signedResponse;
 
+    protected String extractDocument(FeatureImpl feature, String json, String pdfUrl, String configFilePath, String pvtCertFilePath, String pvtCertType, String pvtCertPasswordType, String pubCertFilePath, String pubCertType, String tempFilePath) {
         PdfCertifier pdfCertifier = new PdfCertifier(feature.getPrivateCertificateFilePath(configFilePath, pvtCertFilePath, pvtCertType), feature.getPassword(configFilePath, pvtCertFilePath, pvtCertPasswordType), feature.getPublicCertificateURL(configFilePath, pubCertFilePath, pubCertType));
         JsonPdfMapper mapper = new JsonPdfMapper();
         try {
             String sigID = UUID.randomUUID().toString();
-            String pdfPath = feature.createTempFile(pdfUrl, tempFilePath, "temp.pdf").getPath();
+            String pdfPath = feature.createTempFile(pdfUrl, tempFilePath, UUID.randomUUID().toString() + Constant.FileExtenstion.PDF).getPath();
             pdfCertifier.signPdf(pdfPath, sigID);
-            String signedPdfPath = Paths.get(pdfPath).getParent() + File.separator + "signed_" + Paths.get(pdfPath).getFileName().toString();
 
+            String signedPdfPath = Paths.get(pdfPath).getParent() + File.separator + Constant.SIGNED + Paths.get(pdfPath).getFileName().toString();
             String pdfHash = mapper.getHashOfTheOriginalContent(signedPdfPath);
+
             String formattedJson = new JsonBuilder().constructAsNestedJson(json, pdfHash, feature);
             JsonExtractor jsonExtractor = new JsonExtractor(feature.getPrivateCertificateFilePath(configFilePath, pvtCertFilePath, pvtCertType),
                     feature.getPassword(configFilePath, pvtCertFilePath, pvtCertPasswordType),
                     feature.getPublicCertificateURL(configFilePath, pubCertFilePath, pubCertType));
-            //TODO : call sign pdf method and return pdf as well
 
-            return jsonExtractor.signExtactedJson(formattedJson);
+            signedResponse.setJson(jsonExtractor.signExtactedJson(formattedJson));
+            signedResponse.setPdf(signedPdfPath);
+            return new Gson().toJson(signedResponse);
         } catch (CMSException | OperatorCreationException | IOException | DocumentException | GeneralSecurityException e) {
             throw new RuntimeException(e);
         }
