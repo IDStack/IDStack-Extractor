@@ -15,9 +15,7 @@ import org.idstack.feature.sign.pdf.PdfCertifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.UUID;
 
@@ -38,11 +36,9 @@ public class Router {
         JsonPdfMapper mapper = new JsonPdfMapper();
         try {
             String sigID = UUID.randomUUID().toString();
-            String pdfPath = feature.createTempFile(pdfUrl, tempFilePath, UUID.randomUUID().toString() + Constant.FileExtenstion.PDF).getPath();
-            pdfCertifier.signPdf(pdfPath, sigID);
-
-            String signedPdfPath = Paths.get(pdfPath).getParent() + File.separator + Constant.SIGNED + Paths.get(pdfPath).getFileName().toString();
-            String pdfHash = mapper.getHashOfTheOriginalContent(signedPdfPath);
+            String localPdfPath = feature.createTempFile(pdfUrl, tempFilePath, UUID.randomUUID().toString() + Constant.FileExtenstion.PDF).getPath();
+            String localSignedPdfPath = pdfCertifier.signPdf(localPdfPath, sigID);
+            String pdfHash = mapper.getHashOfTheOriginalContent(localSignedPdfPath);
 
             String formattedJson = new JsonBuilder().constructAsNestedJson(json, pdfHash, feature);
             JsonExtractor jsonExtractor = new JsonExtractor(feature.getPrivateCertificateFilePath(configFilePath, pvtCertFilePath, pvtCertType),
@@ -50,7 +46,7 @@ public class Router {
                     feature.getPublicCertificateURL(configFilePath, pubCertFilePath, pubCertType));
 
             signedResponse.setJson(jsonExtractor.signExtactedJson(formattedJson));
-            signedResponse.setPdf(signedPdfPath);
+            signedResponse.setPdf(feature.parseLocalFilePathAsOnlineUrl(localSignedPdfPath, configFilePath));
             return new Gson().toJson(signedResponse);
         } catch (CMSException | OperatorCreationException | IOException | DocumentException | GeneralSecurityException e) {
             throw new RuntimeException(e);
