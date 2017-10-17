@@ -9,7 +9,6 @@ import org.idstack.feature.FeatureImpl;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author Sachithra Dangalla
@@ -61,7 +60,7 @@ public class DocParserHandler {
 
 
         String parserID = Constant.Extractor.DOCPARSER_PARSERS.get(parserType);
-        String documentID = uploadDocumentToDocParser(feature, documentURL, parserID);
+//        String documentID = uploadDocumentToDocParser(feature, documentURL, parserID);
 
         HashMap<String, String> requestProperties = new HashMap<>();
         requestProperties.put("Authorization", getAuthorizationKey());
@@ -74,7 +73,7 @@ public class DocParserHandler {
         DOCPARSER_TEMP_DOCID.put(Constant.DocumentType.PASSPORT, "5f32c93215c83b25601944983113ec76");
         DOCPARSER_TEMP_DOCID.put(Constant.DocumentType.UNIVERSITY_ID, "15834ca8741af3fa6d71774ceb86c778");
         DOCPARSER_TEMP_DOCID.put(Constant.DocumentType.TRANSCRIPT, "a1dbfc221fbae1e953744476afc5ec01");
-        documentID = DOCPARSER_TEMP_DOCID.get(parserType);
+        String documentID = DOCPARSER_TEMP_DOCID.get(parserType);
 
         //wait for 10 seconds
 //        TimeUnit.SECONDS.sleep(15);
