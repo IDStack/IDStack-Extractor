@@ -18,6 +18,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.util.UUID;
 
@@ -39,7 +41,10 @@ public class Router {
         try {
             String sigID = UUID.randomUUID().toString();
             String pdfPath = feature.createTempFile(pdfUrl, tempFilePath, UUID.randomUUID().toString() + Constant.FileExtenstion.PDF).getPath();
+
             String signedPdfPath = storeFilePath + Constant.SIGNED + File.separator;
+            Files.createDirectories(Paths.get(signedPdfPath));
+
             pdfCertifier.signPdf(pdfPath, signedPdfPath, sigID);
             String pdfHash = mapper.getHashOfTheOriginalContent(signedPdfPath);
 
