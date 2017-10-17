@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -85,21 +84,20 @@ public class APIHandler {
     }
 
     /**
-     * Returned the saved configurations. If property is mentioned this returns only the mentioned property from the given type otherwise everything
+     * Return the saved configurations for the given type
      *
-     * @param version  api version
-     * @param apikey   api key
-     * @param property property of configuration
+     * @param version api version
+     * @param apikey  api key
      * @return configuration as json
      */
-    @RequestMapping(value = {"/{version}/{apikey}/getconfig/basic/{property}", "/{version}/{apikey}/getconfig/{type}"}, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = {"/{version}/{apikey}/getconfig/basic"}, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String getConfiguration(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @PathVariable("property") Optional<String> property) {
+    public String getConfiguration(@PathVariable("version") String version, @PathVariable("apikey") String apikey) {
         if (!feature.validateRequest(version))
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_VERSION));
         if (!feature.validateRequest(apiKey, apikey))
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_API_KEY));
-        return feature.getConfigurationAsJson(configFilePath, Constant.Configuration.BASIC_CONFIG_FILE_NAME, property);
+        return new Gson().toJson(feature.getConfiguration(configFilePath, Constant.Configuration.BASIC_CONFIG_FILE_NAME));
     }
 
     /**
@@ -148,7 +146,6 @@ public class APIHandler {
      * @param pdfUrl  pdf URL of document
      * @return signed json + pdf documents
      */
-    //TODO : return both signed MR + signed PDF
     @RequestMapping(value = "/{version}/{apikey}/extract", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String extractDocument(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestParam(value = "json") String json, @RequestParam(value = "pdf") String pdfUrl) {
@@ -156,7 +153,7 @@ public class APIHandler {
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_VERSION));
         if (!feature.validateRequest(apiKey, apikey))
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_API_KEY));
-        return router.extractDocument(feature, json, pdfUrl, configFilePath, pvtCertFilePath, pvtCertType, pvtCertPasswordType, pubCertFilePath, pubCertType,tmpFilePath).replaceAll(pubFilePath, File.separator);
+        return router.extractDocument(feature, json, pdfUrl, configFilePath, pvtCertFilePath, pvtCertType, pvtCertPasswordType, pubCertFilePath, pubCertType, tmpFilePath).replaceAll(pubFilePath, File.separator);
     }
 
     /**
