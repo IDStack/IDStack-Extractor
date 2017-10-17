@@ -68,8 +68,16 @@ public class DocParserHandler {
         String body = "{}";
 
 
+        //TODO keep a map of docURL vs docID and check if same URL appears again
+        //Temp update document ID with previous docID
+        Map<String, String> DOCPARSER_TEMP_DOCID = new HashMap();
+        DOCPARSER_TEMP_DOCID.put(Constant.DocumentType.PASSPORT, "5f32c93215c83b25601944983113ec76");
+        DOCPARSER_TEMP_DOCID.put(Constant.DocumentType.UNIVERSITY_ID, "15834ca8741af3fa6d71774ceb86c778");
+        DOCPARSER_TEMP_DOCID.put(Constant.DocumentType.TRANSCRIPT, "a1dbfc221fbae1e953744476afc5ec01");
+        documentID = DOCPARSER_TEMP_DOCID.get(parserType);
+
         //wait for 10 seconds
-        TimeUnit.SECONDS.sleep(15);
+//        TimeUnit.SECONDS.sleep(15);
 
         //call get data API
         String response = feature.callAPI(GET_DATA_URL + parserID + "/" + documentID + "?format=flat", "GET", requestProperties, body);
