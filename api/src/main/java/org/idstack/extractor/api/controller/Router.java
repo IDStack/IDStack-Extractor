@@ -45,7 +45,7 @@ public class Router {
             String signedPdfPath = storeFilePath + Constant.SIGNED + File.separator;
             Files.createDirectories(Paths.get(signedPdfPath));
 
-            pdfCertifier.signPdf(pdfPath, signedPdfPath, sigID);
+            signedPdfPath = pdfCertifier.signPdf(pdfPath, signedPdfPath, sigID);
             String pdfHash = mapper.getHashOfTheOriginalContent(signedPdfPath);
 
             String formattedJson = new JsonBuilder().constructAsNestedJson(json, pdfHash, feature);
