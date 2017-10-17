@@ -33,13 +33,13 @@ public class Router {
     @Autowired
     private SignedResponse signedResponse;
 
-    protected String extractDocument(FeatureImpl feature, String json, String pdfUrl, String configFilePath, String pvtCertFilePath, String pvtCertType, String pvtCertPasswordType, String pubCertFilePath, String pubCertType, String tempFilePath, String pubFilePath) {
+    protected String extractDocument(FeatureImpl feature, String json, String pdfUrl, String configFilePath, String pvtCertFilePath, String pvtCertType, String pvtCertPasswordType, String pubCertFilePath, String pubCertType, String tempFilePath, String storeFilePath) {
         PdfCertifier pdfCertifier = new PdfCertifier(feature.getPrivateCertificateFilePath(configFilePath, pvtCertFilePath, pvtCertType), feature.getPassword(configFilePath, pvtCertFilePath, pvtCertPasswordType), feature.getPublicCertificateURL(configFilePath, pubCertFilePath, pubCertType));
         JsonPdfMapper mapper = new JsonPdfMapper();
         try {
             String sigID = UUID.randomUUID().toString();
             String pdfPath = feature.createTempFile(pdfUrl, tempFilePath, UUID.randomUUID().toString() + Constant.FileExtenstion.PDF).getPath();
-            String signedPdfPath = pubFilePath + Constant.SIGNED + File.separator;
+            String signedPdfPath = storeFilePath + Constant.SIGNED + File.separator;
             pdfCertifier.signPdf(pdfPath, signedPdfPath, sigID);
             String pdfHash = mapper.getHashOfTheOriginalContent(signedPdfPath);
 
