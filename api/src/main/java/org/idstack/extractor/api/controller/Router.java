@@ -9,6 +9,7 @@ import org.idstack.extractor.JsonBuilder;
 import org.idstack.extractor.JsonExtractor;
 import org.idstack.feature.Constant;
 import org.idstack.feature.FeatureImpl;
+import org.idstack.feature.Parser;
 import org.idstack.feature.response.SignedResponse;
 import org.idstack.feature.sign.pdf.JsonPdfMapper;
 import org.idstack.feature.sign.pdf.PdfCertifier;
@@ -44,8 +45,7 @@ public class Router {
             JsonExtractor jsonExtractor = new JsonExtractor(feature.getPrivateCertificateFilePath(configFilePath, pvtCertFilePath, pvtCertType),
                     feature.getPassword(configFilePath, pvtCertFilePath, pvtCertPasswordType),
                     feature.getPublicCertificateURL(configFilePath, pubCertFilePath, pubCertType));
-
-            signedResponse.setJson(jsonExtractor.signExtactedJson(formattedJson));
+            signedResponse.setJson(new Parser().parseDocumentJson(jsonExtractor.signExtactedJson(formattedJson)));
             signedResponse.setPdf(feature.parseLocalFilePathAsOnlineUrl(localSignedPdfPath, configFilePath));
             return new Gson().toJson(signedResponse);
         } catch (CMSException | OperatorCreationException | IOException | DocumentException | GeneralSecurityException e) {
