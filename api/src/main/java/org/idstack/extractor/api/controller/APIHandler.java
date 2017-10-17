@@ -153,7 +153,7 @@ public class APIHandler {
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_VERSION));
         if (!feature.validateRequest(apiKey, apikey))
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_API_KEY));
-        return router.extractDocument(feature, json, pdfUrl, configFilePath, pvtCertFilePath, pvtCertType, pvtCertPasswordType, pubCertFilePath, pubCertType, tmpFilePath).replaceAll(pubFilePath, File.separator);
+        return router.extractDocument(feature, json, pdfUrl, configFilePath, pvtCertFilePath, pvtCertType, pvtCertPasswordType, pubCertFilePath, pubCertType, tmpFilePath, pubFilePath).replaceAll(pubFilePath, File.separator);
     }
 
     /**
