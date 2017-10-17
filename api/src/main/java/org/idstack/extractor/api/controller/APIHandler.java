@@ -197,7 +197,7 @@ public class APIHandler {
      * @param apikey  api key
      * @return parsed json by docparser
      */
-    @RequestMapping(value = "/{version}/{apikey}/parse", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{version}/{apikey}/docparse", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String parseDocument(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestParam(value = "pdf") String pdfUrl, @RequestParam(value = "doc_type") String documentType) {
         if (!feature.validateRequest(version))
