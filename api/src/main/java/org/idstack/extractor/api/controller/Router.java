@@ -37,7 +37,7 @@ public class Router {
     @Autowired
     private SignedResponse signedResponse;
 
-    protected String extractDocument(FeatureImpl feature, String json, String pdfUrl, String configFilePath, String pvtCertFilePath, String pvtCertType, String pvtCertPasswordType, String pubCertFilePath, String pubCertType, String tempFilePath) {
+    protected String extractDocument(FeatureImpl feature, String json, String pdfUrl, String configFilePath, String pvtCertFilePath, String pvtCertType, String pvtCertPasswordType, String pubCertFilePath, String pubCertType, String tempFilePath, String requestId) {
         PdfCertifier pdfCertifier = new PdfCertifier(feature.getPrivateCertificateFilePath(configFilePath, pvtCertFilePath, pvtCertType), feature.getPassword(configFilePath, pvtCertFilePath, pvtCertPasswordType), feature.getPublicCertificateURL(configFilePath, pubCertFilePath, pubCertType));
         JsonPdfMapper mapper = new JsonPdfMapper();
         try {
@@ -56,6 +56,9 @@ public class Router {
                     feature.getPublicCertificateURL(configFilePath, pubCertFilePath, pubCertType));
             signedResponse.setJson(new Parser().parseDocumentJson(jsonExtractor.signExtactedJson(formattedJson)));
             signedResponse.setPdf(feature.parseLocalFilePathAsOnlineUrl(signedPdfPath, configFilePath));
+
+            feature.saveRequestConfiguration(configFilePath, requestId);
+
             return new Gson().toJson(signedResponse);
         } catch (CMSException | OperatorCreationException | IOException | DocumentException | GeneralSecurityException e) {
             throw new RuntimeException(e);
