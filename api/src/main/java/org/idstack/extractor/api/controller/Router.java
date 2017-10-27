@@ -15,12 +15,14 @@ import org.idstack.feature.sign.pdf.JsonPdfMapper;
 import org.idstack.feature.sign.pdf.PdfCertifier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
+import java.util.Collections;
 import java.util.UUID;
 
 /**
@@ -58,6 +60,12 @@ public class Router {
         } catch (CMSException | OperatorCreationException | IOException | DocumentException | GeneralSecurityException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected String saveDocument(FeatureImpl feature, MultipartFile pdf, String configFilePath, String tmpFilePath) throws IOException {
+        String tmpPath = feature.createTempFile(pdf.getBytes(), tmpFilePath, UUID.randomUUID().toString() + Constant.FileExtenstion.PDF).toString();
+        String tmpUrl = feature.parseLocalFilePathAsOnlineUrl(tmpPath, configFilePath);
+        return new Gson().toJson(Collections.singletonMap(Constant.TEMP_URL, tmpUrl));
     }
 
     protected String parseDocument(FeatureImpl feature, String pdfUrl, String documentType) {
