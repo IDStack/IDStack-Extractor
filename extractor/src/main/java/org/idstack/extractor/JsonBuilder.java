@@ -80,7 +80,7 @@ public class JsonBuilder {
     }
 
     public String includeHashInJson(String jsonString, String hash) {
-        Document digitalDocument = new Parser().parseDocumentJson(jsonString);
+        Document digitalDocument = Parser.parseDocumentJson(jsonString);
         digitalDocument.getMetaData().setPdfHash(hash);
         return new Gson().toJson(digitalDocument);
     }

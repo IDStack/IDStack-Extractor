@@ -54,7 +54,7 @@ public class Router {
             JsonExtractor jsonExtractor = new JsonExtractor(feature.getPrivateCertificateFilePath(configFilePath, pvtCertFilePath, pvtCertType),
                     feature.getPassword(configFilePath, pvtCertFilePath, pvtCertPasswordType),
                     feature.getPublicCertificateURL(configFilePath, pubCertFilePath, pubCertType));
-            signedResponse.setJson(new Parser().parseDocumentJson(jsonExtractor.signExtactedJson(formattedJson)));
+            signedResponse.setJson(Parser.parseDocumentJson(jsonExtractor.signExtactedJson(formattedJson)));
             signedResponse.setPdf(feature.parseLocalFilePathAsOnlineUrl(signedPdfPath, configFilePath));
 
             feature.saveRequestConfiguration(configFilePath, requestId);
