@@ -7,7 +7,7 @@
     <groupId>org.idstack</groupId>
     <artifactId>extractor-webservice</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-alpha4-SNAPSHOT</version>
+    <version>1.0-alpha3</version>
 
     <modules>
         <module>api</module>
