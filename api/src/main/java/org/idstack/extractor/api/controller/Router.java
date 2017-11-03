@@ -57,6 +57,7 @@ public class Router {
             signedResponse.setJson(Parser.parseDocumentJson(jsonExtractor.signExtactedJson(formattedJson)));
             signedResponse.setPdf(feature.parseLocalFilePathAsOnlineUrl(signedPdfPath, configFilePath));
 
+            // This will add the request id into request configuration list
             feature.saveRequestConfiguration(configFilePath, requestId);
 
             return new Gson().toJson(signedResponse);
