@@ -117,7 +117,7 @@ public class Router {
      * @return status of sending email
      */
     protected String sendEmail(FeatureImpl feature) {
-        feature.sendEmail("ldclakmal@gmail.com", "IDStack Document Extraction", "Test Message");
-        return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.SUCCESS));
+        String status = feature.sendEmail("ldclakmal@gmail.com", "IDStack Document Extraction", "Test Message");
+        return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, status));
     }
 }
