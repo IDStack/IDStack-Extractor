@@ -97,6 +97,12 @@ public class Router {
         return "Hi,\n\n Please find the extracted files.\n\n Request ID \t: " + requestId + "\nDocument Type : " + documentType + "\nJSON \t\t: " + jsonUrl + "\nPDF \t\t: " + pdfUrl + "\n\n Thank You.\nTeam IDStack\nhttp://www.idstack.one";
     }
 
+    /**
+     * This is a test method only.
+     *
+     * @param feature feature
+     * @return status of sending email
+     */
     protected String sendEmail(FeatureImpl feature) {
         feature.sendEmail("ldclakmal@gmail.com", "IDStack Document Extraction", "Test Message");
         return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.SUCCESS));
