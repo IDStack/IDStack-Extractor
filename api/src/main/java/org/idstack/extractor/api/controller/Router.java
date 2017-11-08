@@ -64,7 +64,7 @@ public class Router {
             String finalJsonUrl = feature.parseLocalFilePathAsOnlineUrl(jsonFilePath.toString(), configFilePath);
             String finalPdfUrl = feature.parseLocalFilePathAsOnlineUrl(signedPdfPath, configFilePath);
 
-            String message = populateEmail(requestId, extractedDocument.getMetaData().getDocumentType().toUpperCase(), finalJsonUrl, finalPdfUrl);
+            String message = populateEmailBody(requestId, extractedDocument.getMetaData().getDocumentType().toUpperCase(), finalJsonUrl, finalPdfUrl);
             feature.sendEmail(feature.getEmailByRequestId(storeFilePath, requestId), "IDStack Document Extraction", message);
 
             signedResponse.setJson(Parser.parseDocumentJson(jsonExtractor.signExtactedJson(formattedJson)));
@@ -93,8 +93,21 @@ public class Router {
         }
     }
 
-    private String populateEmail(String requestId, String documentType, String jsonUrl, String pdfUrl) {
-        return "Hi,\n\n Please find the extracted files.\n\n Request ID \t: " + requestId + "\nDocument Type : " + documentType + "\nJSON \t\t: " + jsonUrl + "\nPDF \t\t: " + pdfUrl + "\n\n Thank You.\nTeam IDStack\nhttp://www.idstack.one";
+    private String populateEmailBody(String requestId, String documentType, String jsonUrl, String pdfUrl) {
+        return String.join(
+                System.getProperty("line.separator"),
+                "<p>Hi,</p>",
+                "<p></p>",
+                "<p>Please find the extracted files.</p>",
+                "<p><b>Request ID :</b> " + requestId + "<br>",
+                "<b>Document Type :</b> " + documentType + "<br>",
+                "<b>JSON :</b> " + jsonUrl + "<br>",
+                "<b>PDF :</b> " + pdfUrl + "</p>",
+                "<p></p>",
+                "<p>Thank you.<br>",
+                "Team IDStack<br>",
+                "<a href='http://idstack.one'>http://www.idstack.one</a></p>"
+        );
     }
 
     /**
