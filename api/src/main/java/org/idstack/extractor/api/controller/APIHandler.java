@@ -142,10 +142,11 @@ public class APIHandler {
     /**
      * Create machine readable document after extracting
      *
-     * @param version api version
-     * @param apikey  api key
-     * @param json    json of extracted data
-     * @param pdfUrl  pdf URL of document
+     * @param version   api version
+     * @param apikey    api key
+     * @param json      json of extracted data
+     * @param pdfUrl    pdf URL of document
+     * @param requestId request id
      * @return signed json + pdf documents
      */
     @RequestMapping(value = "/{version}/{apikey}/extract", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -157,7 +158,7 @@ public class APIHandler {
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_API_KEY));
         if (json.isEmpty() || pdfUrl.isEmpty() || requestId.isEmpty())
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_PARAMETER_NULL));
-        return router.extractDocument(feature, json, pdfUrl, configFilePath, pvtCertFilePath, pvtCertType, pvtCertPasswordType, pubCertFilePath, pubCertType, tmpFilePath, requestId).replaceAll(pubFilePath, File.separator);
+        return router.extractDocument(feature, json, pdfUrl, configFilePath, pvtCertFilePath, pvtCertType, pvtCertPasswordType, pubCertFilePath, pubCertType, tmpFilePath, storeFilePath, requestId).replaceAll(pubFilePath, File.separator);
     }
 
     /**
@@ -258,5 +259,13 @@ public class APIHandler {
         if (!feature.validateRequest(version))
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_VERSION));
         return feature.getPublicCertificateURL(configFilePath, pubCertFilePath, pubCertType).replaceAll(pubFilePath, File.separator);
+    }
+
+    @RequestMapping(value = "/{version}/sendemail", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+    @ResponseBody
+    public String sendEmail(@PathVariable("version") String version) {
+        if (!feature.validateRequest(version))
+            return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_VERSION));
+        return router.sendEmail(feature);
     }
 }
