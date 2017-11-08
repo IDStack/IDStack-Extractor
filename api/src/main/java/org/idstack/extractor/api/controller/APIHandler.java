@@ -224,6 +224,16 @@ public class APIHandler {
         return router.saveDocument(feature, pdf, configFilePath, tmpFilePath);
     }
 
+    @RequestMapping(value = "/{version}/{apikey}/cleardocstore", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String clearDocStore(@PathVariable("version") String version, @PathVariable("apikey") String apikey) throws IOException {
+        if (!feature.validateRequest(version))
+            return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_VERSION));
+        if (!feature.validateRequest(apiKey, apikey))
+            return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_API_KEY));
+        return feature.clearDocStore(configFilePath, storeFilePath);
+    }
+
     //*************************************************** PUBLIC API ***************************************************
 
     /**
@@ -261,7 +271,7 @@ public class APIHandler {
         return feature.getPublicCertificateURL(configFilePath, pubCertFilePath, pubCertType).replaceAll(pubFilePath, File.separator);
     }
 
-    @RequestMapping(value = "/{version}/sendemail", method = RequestMethod.GET, produces = MediaType.TEXT_PLAIN_VALUE)
+    @RequestMapping(value = "/{version}/sendemail", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public String sendEmail(@PathVariable("version") String version) {
         if (!feature.validateRequest(version))
