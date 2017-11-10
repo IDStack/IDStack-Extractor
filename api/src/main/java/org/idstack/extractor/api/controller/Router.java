@@ -5,6 +5,7 @@ import com.itextpdf.text.DocumentException;
 import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.idstack.extractor.DocParserHandler;
+import org.idstack.extractor.JsonBuilder;
 import org.idstack.extractor.JsonExtractor;
 import org.idstack.feature.Constant;
 import org.idstack.feature.FeatureImpl;
@@ -47,26 +48,26 @@ public class Router {
 
             String signedPdfPath = tempFilePath + Constant.SIGNED + File.separator;
             Files.createDirectories(Paths.get(signedPdfPath));
-
             signedPdfPath = pdfCertifier.signPdf(pdfPath, signedPdfPath, sigID);
             String pdfHash = mapper.getHashOfTheOriginalContent(signedPdfPath);
+
+            String formattedJson = new JsonBuilder().constructJson(json, pdfHash, feature);
 
             JsonExtractor jsonExtractor = new JsonExtractor(feature.getPrivateCertificateFilePath(configFilePath, pvtCertFilePath, pvtCertType),
                     feature.getPassword(configFilePath, pvtCertFilePath, pvtCertPasswordType),
                     feature.getPublicCertificateURL(configFilePath, pubCertFilePath, pubCertType));
 
-            Document extractedDocument = Parser.parseDocumentJson(jsonExtractor.signExtactedJson(json));
+            Document extractedDocument = Parser.parseDocumentJson(jsonExtractor.signExtactedJson(formattedJson));
 
             Path jsonFilePath = Files.write(Paths.get(tempFilePath).resolve(Paths.get(UUID.randomUUID().toString() + Constant.FileExtenstion.JSON)), new Gson().toJson(extractedDocument).getBytes());
             String finalJsonUrl = feature.parseLocalFilePathAsOnlineUrl(jsonFilePath.toString(), configFilePath);
             String finalPdfUrl = feature.parseLocalFilePathAsOnlineUrl(signedPdfPath, configFilePath);
 
-            byte[] pdfByteArray = feature.convertPdfToByteArray(Paths.get(finalPdfUrl));
-
+            // This will send an email to owner with files
             String message = populateEmailBody(requestId, extractedDocument.getMetaData().getDocumentType().toUpperCase(), finalJsonUrl, finalPdfUrl);
             feature.sendEmail(feature.getEmailByRequestId(storeFilePath, requestId), "IDStack Document Extraction", message);
 
-            signedResponse.setJson(Parser.parseDocumentJson(jsonExtractor.signExtactedJson(json)));
+            signedResponse.setJson(extractedDocument);
             signedResponse.setPdf(feature.parseLocalFilePathAsOnlineUrl(signedPdfPath, configFilePath));
 
             // This will add the request id into request configuration list
