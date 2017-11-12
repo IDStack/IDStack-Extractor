@@ -54,8 +54,6 @@ public class JsonExtractor {
     private Document sign(Document completeDigitalJson) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, NoSuchProviderException, IOException, UnrecoverableKeyException, CMSException, OperatorCreationException {
         //this to make empty the base 64 encoded pdf, extractor block and the validator block
         completeDigitalJson.getMetaData().setPdf("");
-        completeDigitalJson.setExtractor(null);
-        completeDigitalJson.setValidators(null);
         String jsonStringToSign = new Gson().toJson(completeDigitalJson);
 
         //Setting BouncyCastle as the security provider
