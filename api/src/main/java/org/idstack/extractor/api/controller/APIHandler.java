@@ -145,20 +145,19 @@ public class APIHandler {
      * @param version   api version
      * @param apikey    api key
      * @param json      json of extracted data
-     * @param pdfUrl    pdf URL of document
      * @param requestId request id
      * @return signed json + pdf documents
      */
     @RequestMapping(value = "/{version}/{apikey}/extract", method = RequestMethod.POST, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String extractDocument(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestParam(value = "json") String json, @RequestParam(value = "pdf") String pdfUrl, @RequestParam(value = "request_id") String requestId) {
+    public String extractDocument(@PathVariable("version") String version, @PathVariable("apikey") String apikey, @RequestParam(value = "json") String json, @RequestParam(value = "request_id") String requestId) {
         if (!feature.validateRequest(version))
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_VERSION));
         if (!feature.validateRequest(apiKey, apikey))
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_API_KEY));
-        if (json.isEmpty() || pdfUrl.isEmpty() || requestId.isEmpty())
+        if (requestId.isEmpty())
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_PARAMETER_NULL));
-        return router.extractDocument(feature, json, pdfUrl, configFilePath, pvtCertFilePath, pvtCertType, pvtCertPasswordType, pubCertFilePath, pubCertType, tmpFilePath, storeFilePath, requestId).replaceAll(pubFilePath, File.separator);
+        return router.extractDocument(feature, json, requestId, configFilePath, pvtCertFilePath, pvtCertType, pvtCertPasswordType, pubCertFilePath, pubCertType, tmpFilePath, storeFilePath, pubFilePath).replaceAll(pubFilePath, File.separator);
     }
 
     /**
@@ -192,7 +191,7 @@ public class APIHandler {
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_VERSION));
         if (!feature.validateRequest(apiKey, apikey))
             return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, Constant.Status.ERROR_API_KEY));
-        return feature.getDocumentStore(storeFilePath, configFilePath, false).replaceAll(pubFilePath, File.separator);
+        return feature.getDocumentStore(storeFilePath, configFilePath, true).replaceAll(pubFilePath, File.separator);
     }
 
     /**
