@@ -64,7 +64,7 @@ public class Router {
             String finalPdfUrl = feature.parseLocalFilePathAsOnlineUrl(signedPdfPath, configFilePath);
 
             // This will send an email to owner with files
-            String message = populateEmailBody(requestId, extractedDocument.getMetaData().getDocumentType().toUpperCase(), finalJsonUrl, finalPdfUrl);
+            String message = feature.populateEmailBody(requestId, extractedDocument.getMetaData().getDocumentType().toUpperCase(), finalJsonUrl, finalPdfUrl);
             feature.sendEmail(feature.getEmailByRequestId(storeFilePath, requestId), "IDStack Document Extraction", message);
 
             signedResponse.setJson(extractedDocument);
@@ -91,23 +91,6 @@ public class Router {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    private String populateEmailBody(String requestId, String documentType, String jsonUrl, String pdfUrl) {
-        return String.join(
-                System.getProperty("line.separator"),
-                "<p>Hi,</p>",
-                "<p></p>",
-                "<p>Please find the extracted files.</p>",
-                "<p><b>Request ID :</b> " + requestId + "<br>",
-                "<b>Document Type :</b> " + documentType + "<br>",
-                "<b>JSON :</b> " + jsonUrl + "<br>",
-                "<b>PDF :</b> " + pdfUrl + "</p>",
-                "<p></p>",
-                "<p>Thank you.<br>",
-                "Team IDStack<br>",
-                "<a href='http://idstack.one'>http://www.idstack.one</a></p>"
-        );
     }
 
     /**
