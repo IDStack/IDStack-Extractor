@@ -44,7 +44,7 @@ public class Router {
             signedPdfPath = pdfCertifier.signPdf(pdfPath, signedPdfPath, UUID.randomUUID().toString());
             String pdf = feature.convertPdfToBytesToString(Paths.get(signedPdfPath));
 
-            String formattedJson = new JsonBuilder().constructJson(json, pdf, feature);
+            String formattedJson = new JsonBuilder().constructJson(json, "", feature);
 
             JsonExtractor jsonExtractor = new JsonExtractor(feature.getPrivateCertificateFilePath(configFilePath, pvtCertFilePath, pvtCertType),
                     feature.getPassword(configFilePath, pvtCertFilePath, pvtCertPasswordType),
