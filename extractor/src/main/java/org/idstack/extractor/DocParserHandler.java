@@ -70,9 +70,9 @@ public class DocParserHandler {
         //TODO keep a map of docURL vs docID and check if same URL appears again
         //Temp update document ID with previous docID
         Map<String, String> DOCPARSER_TEMP_DOCID = new HashMap();
-        DOCPARSER_TEMP_DOCID.put(Constant.DocumentType.PASSPORT, "5f32c93215c83b25601944983113ec76");
-        DOCPARSER_TEMP_DOCID.put(Constant.DocumentType.UNIVERSITY_ID, "15834ca8741af3fa6d71774ceb86c778");
-        DOCPARSER_TEMP_DOCID.put(Constant.DocumentType.TRANSCRIPT, "a1dbfc221fbae1e953744476afc5ec01");
+        DOCPARSER_TEMP_DOCID.put(Constant.DocumentType.PASSPORT, "92460c785ed0b32ce4785fe4db7077aa");
+        DOCPARSER_TEMP_DOCID.put(Constant.DocumentType.UNIVERSITY_ID, "d53bb62afa9b7e0e3fa577d4afeebde4");
+        DOCPARSER_TEMP_DOCID.put(Constant.DocumentType.TRANSCRIPT, "d6a534438d33afc58e31a0bb7cf35db6");
         String documentID = DOCPARSER_TEMP_DOCID.get(parserType);
 
         //wait for 10 seconds
