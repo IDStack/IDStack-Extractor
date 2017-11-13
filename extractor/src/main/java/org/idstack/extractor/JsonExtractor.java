@@ -39,8 +39,6 @@ public class JsonExtractor {
     public static char[] PKCS12PASSWORD;
     public static String PUBLICCERURL;
 
-    private Parser jsonParser = new Parser();
-
     public JsonExtractor(String privateCertFilePath, String password, String publicCertURL) {
         this.PKCS12FILE = privateCertFilePath;
         this.PKCS12PASSWORD = password.toCharArray();
@@ -48,14 +46,15 @@ public class JsonExtractor {
     }
 
     public String signExtactedJson(String jsonString) throws CertificateException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, CMSException, OperatorCreationException, NoSuchProviderException, IOException {
-        Document digitizedDocument = jsonParser.parseDocumentJson(jsonString);
+        Document digitizedDocument = Parser.parseDocumentJson(jsonString);
         digitizedDocument = sign(digitizedDocument);
         return new Gson().toJson(digitizedDocument);
     }
 
     private Document sign(Document completeDigitalJson) throws CertificateException, NoSuchAlgorithmException, KeyStoreException, NoSuchProviderException, IOException, UnrecoverableKeyException, CMSException, OperatorCreationException {
-
-        String jsonStringToSign = new Gson().toJson(completeDigitalJson.getContent());
+        //this to make empty the base 64 encoded pdf, extractor block and the validator block
+        completeDigitalJson.getMetaData().setPdf("");
+        String jsonStringToSign = new Gson().toJson(completeDigitalJson);
 
         //Setting BouncyCastle as the security provider
         BouncyCastleProvider provider = new BouncyCastleProvider();
