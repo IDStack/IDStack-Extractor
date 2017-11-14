@@ -72,7 +72,7 @@ public class DocParserHandler {
         Map<String, String> DOCPARSER_TEMP_DOCID = new HashMap();
         DOCPARSER_TEMP_DOCID.put(Constant.DocumentType.PASSPORT, "92460c785ed0b32ce4785fe4db7077aa");
         DOCPARSER_TEMP_DOCID.put(Constant.DocumentType.UNIVERSITY_ID, "d53bb62afa9b7e0e3fa577d4afeebde4");
-        DOCPARSER_TEMP_DOCID.put(Constant.DocumentType.TRANSCRIPT, "d6a534438d33afc58e31a0bb7cf35db6");
+        DOCPARSER_TEMP_DOCID.put(Constant.DocumentType.TRANSCRIPT, "8cc10d35093604a43e12742e8f2d81e6");
         String documentID = DOCPARSER_TEMP_DOCID.get(parserType);
 
         //wait for 10 seconds
