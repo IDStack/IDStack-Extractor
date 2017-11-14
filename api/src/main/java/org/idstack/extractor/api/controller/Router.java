@@ -10,6 +10,7 @@ import org.idstack.extractor.JsonExtractor;
 import org.idstack.feature.Constant;
 import org.idstack.feature.FeatureImpl;
 import org.idstack.feature.Parser;
+import org.idstack.feature.configuration.BasicConfig;
 import org.idstack.feature.document.Document;
 import org.idstack.feature.sign.pdf.PdfCertifier;
 import org.springframework.stereotype.Component;
@@ -57,8 +58,9 @@ public class Router {
             String jsonUrl = feature.parseLocalFilePathAsOnlineUrl(jsonFilePath.toString(), configFilePath);
 
             // This will send an email to owner with files
-            String message = feature.populateEmailBody(requestId, extractedDocument.getMetaData().getDocumentType().toUpperCase(), jsonUrl);
-            feature.sendEmail(feature.getEmailByRequestId(storeFilePath, requestId), "IDStack Document Extraction", message);
+            BasicConfig basicConfig = (BasicConfig) feature.getConfiguration(configFilePath, Constant.Configuration.BASIC_CONFIG_FILE_NAME);
+            String body = feature.populateEmailBody(requestId, extractedDocument.getMetaData().getDocumentType().toUpperCase(), jsonUrl, basicConfig);
+            feature.sendEmail(feature.getEmailByRequestId(storeFilePath, requestId), "EXTRACTOR - IDStack Document Extraction", body);
 
             // This will add the request id into request configuration list
             feature.saveRequestConfiguration(configFilePath, requestId);
@@ -81,16 +83,5 @@ public class Router {
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * This is a test method only.
-     *
-     * @param feature feature
-     * @return status of sending email
-     */
-    protected String sendEmail(FeatureImpl feature) {
-        String status = feature.sendEmail("ldclakmal@gmail.com", "IDStack Document Extraction", "Test Message");
-        return new Gson().toJson(Collections.singletonMap(Constant.Status.STATUS, status));
     }
 }
