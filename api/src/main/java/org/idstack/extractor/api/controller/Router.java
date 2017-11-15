@@ -54,7 +54,7 @@ public class Router {
             Document extractedDocument = Parser.parseDocumentJson(jsonExtractor.signExtactedJson(formattedJson));
             extractedDocument.getMetaData().setPdf(pdf);
 
-            Path jsonFilePath = Files.write(Paths.get(tempFilePath).resolve(Paths.get(UUID.randomUUID().toString() + Constant.FileExtenstion.JSON)), new Gson().toJson(extractedDocument).getBytes());
+            Path jsonFilePath = Files.write(Paths.get(tempFilePath).resolve(Paths.get(UUID.randomUUID().toString() + Constant.FileExtenstion.JSON)), new Gson().toJson(extractedDocument).replaceAll(pubFilePath, File.separator).getBytes());
             String jsonUrl = feature.parseLocalFilePathAsOnlineUrl(jsonFilePath.toString(), configFilePath);
 
             // This will send an email to owner with files
