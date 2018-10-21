@@ -8,6 +8,7 @@ import org.idstack.extractor.DocParserHandler;
 import org.idstack.extractor.JsonBuilder;
 import org.idstack.extractor.JsonExtractor;
 import org.idstack.feature.Constant;
+import org.idstack.feature.Constant.Configuration;
 import org.idstack.feature.FeatureImpl;
 import org.idstack.feature.Parser;
 import org.idstack.feature.configuration.BasicConfig;
@@ -82,6 +83,17 @@ public class Router {
             return new DocParserHandler().getExtractedDocument(feature, pdfUrl, documentType);
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    protected String getConfigFileName(String type) {
+        switch (type) {
+            case Constant.Configuration.BASIC_CONFIG:
+                return Constant.Configuration.BASIC_CONFIG_FILE_NAME;
+            case Configuration.AWS_CONFIG:
+                return Configuration.AWS_CONFIG_FILE_NAME;
+            default:
+                return null;
         }
     }
 }
